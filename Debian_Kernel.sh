@@ -49,8 +49,6 @@ fi
 
 apt-get update
 apt-get install --no-install-recommends -y linux-image-${item}
-sed -i "s/GRUB_DEFAULT=0/GRUB_DEFAULT= linux-image-${item}/g" /etc/default/grub
-sudo update-grub
 if [ $? -ne 0 ]; then
   if [ "$deb_ver" == "8" ]; then
     dpkg -l |grep -q 'linux-base' || {
@@ -93,4 +91,11 @@ while true; do
   done
 apt-get autoremove -y
 [ -d '/var/lib/apt/lists' ] && find /var/lib/apt/lists -type f -delete
+if [ "$deb_relese" == 'ubuntu' ]; then
+sed -i "s/GRUB_DEFAULT=0/GRUB_DEFAULT= linux-image-${item}/g" /etc/default/grub
+sudo update-grub
 reboot
+elif [ "$deb_relese" == 'debian' ]; then
+sudo update-grub
+reboot
+fi
