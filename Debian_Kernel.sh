@@ -92,7 +92,7 @@ while true; do
 apt-get autoremove -y
 [ -d '/var/lib/apt/lists' ] && find /var/lib/apt/lists -type f -delete
 if [ "$deb_relese" == 'ubuntu' ]; then
-sed -i "s/GRUB_DEFAULT=0/GRUB_DEFAULT= linux-image-${item}/g" /etc/default/grub
+sed -i "s/GRUB_DEFAULT=0/GRUB_DEFAULT=linux-image-${item}/g" /etc/default/grub
 sudo update-grub
 reboot
 elif [ "$deb_relese" == 'debian' ]; then
