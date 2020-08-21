@@ -9,19 +9,10 @@ if [ "$deb_relese" == 'ubuntu' ]; then
   deb_ver="$(echo $deb_issue |grep -o '[0-9]*\.[0-9]*' |head -n1)"
   if [ "$deb_ver" == "14.04" ]; then
     item="3.16.0-77-generic" && ver='trusty'
-    sed -i "s/GRUB_DEFAULT=0/GRUB_DEFAULT=linux-image-3.16.0-77-generic/g" /etc/default/grub
-    sudo update-grub
-    reboot
   elif [ "$deb_ver" == "16.04" ]; then
     item="4.8.0-36-generic" && ver='xenial'
-    sed -i "s/GRUB_DEFAULT=0/GRUB_DEFAULT=linux-image-4.8.0-36-generic/g" /etc/default/grub
-    sudo update-grub
-    reboot
   elif [ "$deb_ver" == "18.04" ]; then
     item="4.15.0-30-generic" && ver='bionic'
-    sed -i "s/GRUB_DEFAULT=0/GRUB_DEFAULT=linux-image-4.15.0-30-generic/g" /etc/default/grub
-    sudo update-grub
-    reboot
   else
     exit 1
   fi
@@ -58,6 +49,9 @@ fi
 
 apt-get update
 apt-get install --no-install-recommends -y linux-image-${item}
+sed -i "s/GRUB_DEFAULT=0/GRUB_DEFAULT= linux-image-${item}/g" /etc/default/grub
+sudo update-grub
+reboot
 if [ $? -ne 0 ]; then
   if [ "$deb_ver" == "8" ]; then
     dpkg -l |grep -q 'linux-base' || {
@@ -100,4 +94,3 @@ while true; do
   done
 apt-get autoremove -y
 [ -d '/var/lib/apt/lists' ] && find /var/lib/apt/lists -type f -delete
-
